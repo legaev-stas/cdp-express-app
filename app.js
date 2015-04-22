@@ -12,23 +12,13 @@ app.use(function(req, res, next){
     next();
 });
 
-// multiple middlewates at one mount point
-app.get('/users/:id', function(req, res, next){
-    console.log('multiple CB1')
-    next()
-}, function(req, res, next){
-    console.log('multiple CB2')
-    next('route')
-}, function(req, res, next){
-    console.log('multiple CB3')
-    next()
-})
-
-app.get('/users/:id', function(req, res, next){
-    // we have access to route parameters throuth object req.params
-    res.end('<h1>Page of user #' + req.params.id + '</h1>')
+app.get('/', function(req, res, next){
+    res.end('<h1>Home page</h1>')
 });
 
+app.get('/users', function(req, res, next){
+    res.end('<h1>Users page</h1>')
+});
 
 
 module.exports = app;
