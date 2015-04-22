@@ -1,46 +1,60 @@
 var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
+var routes = require('./routes/index');
+var users = require('./routes/users');
+
 var app = express();
 
-app.use(function(req, res, next){
-    var date = new Date();
-    console.log('%s %s Recevded request:\n\t%s: %s',
-        date.toLocaleDateString(),
-        date.toLocaleTimeString(),
-        req.method,
-        req.url);
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-    next();
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', routes);
+app.use('/users', users);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
-app.get('/', function(req, res, next){
-    res.end('<h1>Home page</h1>')
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
 });
 
-app.get('/users', function(req, res, next){
-    res.end('<h1>Users page</h1>')
-});
-
-app.get('/error-will-happen', function(req, res, next){
-    errorProducingFunction(); // this line throw error
-    res.end('<h1>Some page will be here</h1>')
-});
-
-app.get('/forbidden', function(req, res, next){
-    // if we call next with something that is not 'route'
-    // will redirect on error handling middleware
-    next(new Error())
-});
-
-
-app.use(function(err, req, res, next){
-    res.statusCode = 500;
-    res.end('Sorry, internal server error has occured.')
-});
-
-// 404 error handler should be the last in order of middleware
-app.use(function(req, res){
-    res.statusCode = 404;
-    res.end('<h1>Not Found</h1>')
-});
 
 module.exports = app;
