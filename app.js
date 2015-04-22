@@ -19,16 +19,12 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(function(req, res, next) {
     res.setHeader('Content-Type', 'text/plain')
-    res.write('you posted:\n')
-    if(req.method === 'GET'){
-        res.end(JSON.stringify(req.query, null, 2))
-    } else{
-        res.end(JSON.stringify(req.body, null, 2))
-    }
+    res.write('cookies sent:\n')
+    res.end(JSON.stringify(req.cookies, null, 2))
 });
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
