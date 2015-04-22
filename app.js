@@ -12,13 +12,17 @@ app.use(function(req, res, next){
     next();
 });
 
-app.param('id',function (req, res, next, id) {
-    if(isNaN(+id)){
-        res.send('<h1>User ID should be a number</h1>');
-    } else{
-        next();
-    }
-});
+// multiple middlewates at one mount point
+app.get('/users/:id', function(req, res, next){
+    console.log('multiple CB1')
+    next()
+}, function(req, res, next){
+    console.log('multiple CB2')
+    next('route')
+}, function(req, res, next){
+    console.log('multiple CB3')
+    next()
+})
 
 app.get('/users/:id', function(req, res, next){
     // we have access to route parameters throuth object req.params
