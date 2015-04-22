@@ -20,6 +20,17 @@ app.get('/users', function(req, res, next){
     res.end('<h1>Users page</h1>')
 });
 
+app.get('/error-will-happen', function(req, res, next){
+    errorProducingFunction(); // this line throw error
+    res.end('<h1>Some page will be here</h1>')
+});
+
+app.get('/forbidden', function(req, res, next){
+    // if we call next with something that is not 'route'
+    // will redirect on error handling middleware
+    next(new Error())
+});
+
 
 // 404 error handler should be the last in order of middleware
 app.use(function(req, res){
