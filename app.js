@@ -12,25 +12,19 @@ app.use(function(req, res, next){
     next();
 });
 
-// this will be invoked whenewer BASE of URL matches to '/users'
-app.use('/users', function(req, res, next){
-    console.log('base was matched so app.use was invoked');
-    next();
+app.param('id',function (req, res, next, id) {
+    if(isNaN(+id)){
+        res.send('<h1>User ID should be a number</h1>');
+    } else{
+        next();
+    }
 });
 
-// this will be invoked to all request methods at path '/users/request'
-app.all('/users/request', function(req, res, next){
-    console.log('app.all method intercepts all methods for particular path');
-    next();
+app.get('/users/:id', function(req, res, next){
+    // we have access to route parameters throuth object req.params
+    res.end('<h1>Page of user #' + req.params.id + '</h1>')
 });
 
-app.get('/users/request', function(req, res, next){
-    res.end('<h1>GET request finished successfully!</h1>')
-});
-
-app.post('/users/request', function(req, res, next){
-    res.end('POST request finished successfully!')
-});
 
 
 module.exports = app;
