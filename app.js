@@ -21,4 +21,10 @@ app.get('/users', function(req, res, next){
 });
 
 
+// 404 error handler should be the last in order of middleware
+app.use(function(req, res){
+    res.statusCode = 404;
+    res.end('<h1>Not Found</h1>')
+});
+
 module.exports = app;
