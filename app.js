@@ -32,6 +32,11 @@ app.get('/forbidden', function(req, res, next){
 });
 
 
+app.use(function(err, req, res, next){
+    res.statusCode = 500;
+    res.end('Sorry, internal server error has occured.')
+});
+
 // 404 error handler should be the last in order of middleware
 app.use(function(req, res){
     res.statusCode = 404;
