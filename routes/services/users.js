@@ -18,7 +18,13 @@ router.get('/', function(req, res, next) {
 
 /* GET particular user by ID */
 router.get('/:id', function(req, res, next) {
-    res.json(db.get(req.params.id));
+    User.findById(req.params.id, function(err, user){
+        if(err){
+            res.end(500)
+        } else{
+            res.json(user);
+        }
+    })
 });
 
 /* create user */
@@ -34,7 +40,7 @@ router.post('/', function(req, res, next) {
 
 /* update user entry */
 router.put('/:id', function(req, res, next) {
-    db.update(req.params.id, req.body, function(err, model){
+    User.findByIdAndUpdate(req.params.id, req.body, function(err, model){
         if(err){
             res.end(500)
         } else{
@@ -45,14 +51,12 @@ router.put('/:id', function(req, res, next) {
 
 /* delete user entry */
 router.delete('/:id', function(req, res, next) {
-    User.findById(req.params.id, function(err, model){
-        model.remove(function(err){
-            if(err){
-                res.end(500)
-            } else{
-                res.send(200);
-            }
-        })
+    User.findByIdAndRemove(req.params.id, function(err, model){
+        if(err){
+            res.end(500)
+        } else{
+            res.sendStatus(200);
+        }
     })
 });
 
