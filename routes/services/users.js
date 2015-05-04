@@ -45,12 +45,14 @@ router.put('/:id', function(req, res, next) {
 
 /* delete user entry */
 router.delete('/:id', function(req, res, next) {
-    db.remove(req.params.id, function(err){
-        if(err){
-            res.end(500)
-        } else{
-            res.send(200);
-        }
+    User.findById(req.params.id, function(err, model){
+        model.remove(function(err){
+            if(err){
+                res.end(500)
+            } else{
+                res.send(200);
+            }
+        })
     })
 });
 
