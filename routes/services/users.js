@@ -23,11 +23,11 @@ router.get('/:id', function(req, res, next) {
 
 /* create user */
 router.post('/', function(req, res, next) {
-    db.add(req.body, function(err, model){
+    User.create(req.body, function (err, user) {
         if(err){
             res.end(500)
         } else{
-            res.json(model);
+            res.json(user);
         }
     })
 });

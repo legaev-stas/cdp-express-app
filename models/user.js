@@ -2,27 +2,12 @@ var mongoose = require('../db/mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-    firstName: {
-        type: String,
-        required: true
-    },
-    lastName: {
-        type: String,
-        required: true
-    },
-    company: {
-        type: String
-    },
-    position: {
-        type: String
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    phoneNumber: {
-        type: String
-    }
+    firstName: String,
+    lastName: String,
+    company: String,
+    position: String,
+    email: String,
+    phoneNumber: String
 });
 
 schema.virtual('fullName').get(function () {
