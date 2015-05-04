@@ -25,8 +25,12 @@ var schema = new Schema({
     }
 });
 
+schema.virtual('fullName').get(function () {
+    return this.firstName + ' ' + this.lastName;
+});
+
 schema.methods.greetUser = function(){
-    return 'Welcome ' + this.firstName + ' ' + this.lastName;
+    return 'Welcome ' + this.fullName;
 }
 
 schema.set('toJSON', {
