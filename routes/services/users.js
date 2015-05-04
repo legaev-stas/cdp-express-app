@@ -1,13 +1,19 @@
 var express = require('express');
 var router = express.Router();
 
-var User = require('../../models/user')
-
 var db = require('../../db/db');
+var User = require('../../models/user');
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    res.json(db.getCollection());
+    User.find(function(err, matchedUsers){
+        if(err){
+            res.end(500)
+        } else{
+            res.json(matchedUsers);
+        }
+    })
 });
 
 /* GET particular user by ID */

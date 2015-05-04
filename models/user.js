@@ -29,10 +29,6 @@ schema.virtual('fullName').get(function () {
     return this.firstName + ' ' + this.lastName;
 });
 
-schema.methods.greetUser = function(){
-    return 'Welcome ' + this.fullName;
-}
-
 schema.set('toJSON', {
     transform: function(doc, ret, options){
         ret.id = doc._id;
@@ -40,10 +36,5 @@ schema.set('toJSON', {
         delete ret.__v;
     }
 });
-
-var User =  mongoose.model('User', schema);
-var john = new User({firstName: 'John', lastName: 'Smith'})
-console.log(john.greetUser())
-
 
 module.exports = mongoose.model('User', schema);
