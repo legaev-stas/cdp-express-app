@@ -7,7 +7,10 @@ var User = require('../../models/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    User.find(function(err, matchedUsers){
+    var query = User.find()
+        .sort((req.query.sortDir === 'asc' ? '' : '-') + req.query.sortBy);
+
+    query.exec(function(err, matchedUsers){
         if(err){
             res.end(500)
         } else{

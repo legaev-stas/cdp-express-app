@@ -4,6 +4,12 @@ define([
     , 'text!app/users-list.tpl'
     , 'app/user-form'
 ], function(Backbone, UsersCollection, tpl, UserForm){
+
+    var requestConfig = {
+        sortBy: 'firstName',
+        sortDir: 'asc'
+    }
+
     return Backbone.View.extend({
         el: '.users-list',
 
@@ -13,25 +19,29 @@ define([
 
         events: {
             'click .user-form': 'showUserForm',
-            'click .delete-user': 'deleteUser'
+            'click .delete-user': 'deleteUser',
+            'click .sortable': '_sortTable'
         },
 
         initialize: function(){
             this.listenTo(this.users, 'sync', this.render);
-            this.users.fetch();
+            this.users.fetch({data: requestConfig});
             this._userForm = new UserForm()
 
             this.listenTo(this.users, 'destroy', function(){
-                this.users.fetch();
+                this.users.fetch({data: requestConfig});
             })
 
             this.listenTo(Backbone.Events, 'userWasSaved', function(){
-                this.users.fetch();
+                this.users.fetch({data: requestConfig});
             });
         },
 
         render: function(){
-            this.$el.html(this.template({collection: this.users.toJSON()}));
+            this.$el.html(this.template({
+                collection: this.users.toJSON(),
+                requestConfig: requestConfig
+            }));
 
             this._userForm.setElement(this.$('.' + this._userForm.className).get(0));
 
@@ -44,6 +54,15 @@ define([
 
         deleteUser: function(e){
             this.users.get($(e.target).data('id')).destroy();
+        },
+
+        _sortTable: function(e){
+            this.users.fetch({
+                data: _.extend(requestConfig, {
+                    sortBy: $(e.target).data('sortby'),
+                    sortDir: $(e.target).hasClass('asc') ? 'desc' : 'asc'
+                })
+            });
         }
     });
 });

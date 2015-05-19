@@ -2,12 +2,12 @@
 <% if(collection.length){ %>
 <table class="table table-bordered table-hover">
     <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Company</th>
-        <th>Job Position</th>
-        <th>Email</th>
-        <th>Phone Number</th>
+        <th class="sortable <%= requestConfig.sortBy === 'firstName' ? requestConfig.sortDir : null %>" data-sortby="firstName">First Name</th>
+        <th class="sortable <%= requestConfig.sortBy === 'lastName' ? requestConfig.sortDir : null %>" data-sortby="lastName">Last Name</th>
+        <th class="sortable <%= requestConfig.sortBy === 'company' ? requestConfig.sortDir : null %>" data-sortby="company">Company</th>
+        <th class="sortable <%= requestConfig.sortBy === 'position' ? requestConfig.sortDir : null %>" data-sortby="position">Job Position </th>
+        <th class="sortable <%= requestConfig.sortBy === 'email' ? requestConfig.sortDir : null %>" data-sortby="email">Email </th>
+        <th class="sortable <%= requestConfig.sortBy === 'phoneNumber' ? requestConfig.sortDir : null %>" data-sortby="phoneNumber">Phone Number </th>
         <th></th>
     </tr>
     <% _.each(collection, function(user){ %>
