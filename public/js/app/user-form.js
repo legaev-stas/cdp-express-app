@@ -56,7 +56,7 @@ define([
 
         _saveSuccessHandler: function(){
             this.$('.modal').one('hidden.bs.modal', function(){
-                Backbone.Events.trigger('userWasSaved');
+                Backbone.Events.trigger('usersCollectionWasModified');
             });
 
             this.closePopup();

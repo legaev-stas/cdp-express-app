@@ -18,3 +18,10 @@ th.desc:after{
     content: '˅';
     display: inline;
 }
+
+.pagination-holder{
+    margin: 20px 0;
+}
+.pagination-holder .pagination{
+    margin: -12px 0 0;
+}

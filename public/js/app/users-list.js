@@ -3,11 +3,14 @@ define([
     , 'app/users-collection'
     , 'text!app/users-list.tpl'
     , 'app/user-form'
-], function(Backbone, UsersCollection, tpl, UserForm){
+    , 'app/pagination'
+], function(Backbone, UsersCollection, tpl, UserForm, Pagination){
 
     var requestConfig = {
         sortBy: 'firstName',
-        sortDir: 'asc'
+        sortDir: 'asc',
+        perPage: 5,
+        offset: 1
     }
 
     return Backbone.View.extend({
@@ -24,6 +27,11 @@ define([
         },
 
         initialize: function(){
+            this.pagination = new Pagination({
+                collection: this.users,
+                requestConfig: requestConfig
+            });
+
             this.listenTo(this.users, 'sync', this.render);
             this.users.fetch({data: requestConfig});
             this._userForm = new UserForm()
@@ -32,7 +40,7 @@ define([
                 this.users.fetch({data: requestConfig});
             })
 
-            this.listenTo(Backbone.Events, 'userWasSaved', function(){
+            this.listenTo(Backbone.Events, 'usersCollectionWasModified', function(){
                 this.users.fetch({data: requestConfig});
             });
         },
@@ -44,6 +52,9 @@ define([
             }));
 
             this._userForm.setElement(this.$('.' + this._userForm.className).get(0));
+
+            this.pagination.setElement(this.$('.pagination-holder').get(0))
+            this.pagination.render();
 
             return this;
         },

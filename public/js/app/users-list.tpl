@@ -1,5 +1,6 @@
 <button type="button" class="btn btn-primary user-form">Create entry</button><br/><br/>
 <% if(collection.length){ %>
+<div class="pagination-holder"></div>
 <table class="table table-bordered table-hover">
     <tr>
         <th class="sortable <%= requestConfig.sortBy === 'firstName' ? requestConfig.sortDir : null %>" data-sortby="firstName">First Name</th>

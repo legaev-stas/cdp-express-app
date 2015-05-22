@@ -10,12 +10,19 @@ router.get('/', function(req, res, next) {
     var query = User.find()
         .sort((req.query.sortDir === 'asc' ? '' : '-') + req.query.sortBy);
 
-    query.exec(function(err, matchedUsers){
-        if(err){
-            res.end(500)
-        } else{
-            res.json(matchedUsers);
-        }
+    query.count(function(err, count){
+        query.skip(req.query.perPage * (req.query.offset - 1))
+        .limit(req.query.perPage)
+        .exec('find', function(err, matchedUsers){
+            if(err){
+                res.end(500)
+            } else{
+                res.json({
+                    collection: matchedUsers,
+                    total: count
+                });
+            }
+        })
     })
 });
 
