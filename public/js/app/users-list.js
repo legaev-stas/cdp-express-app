@@ -4,13 +4,16 @@ define([
     , 'text!app/users-list.tpl'
     , 'app/user-form'
     , 'app/pagination'
-], function(Backbone, UsersCollection, tpl, UserForm, Pagination){
+    , 'app/filter'
+], function(Backbone, UsersCollection, tpl, UserForm, Pagination, Filter){
 
     var requestConfig = {
         sortBy: 'firstName',
         sortDir: 'asc',
         perPage: 5,
-        offset: 1
+        offset: 1,
+        filter: null,
+        filterBy: null
     }
 
     return Backbone.View.extend({
@@ -29,6 +32,10 @@ define([
         initialize: function(){
             this.pagination = new Pagination({
                 collection: this.users,
+                requestConfig: requestConfig
+            });
+
+            this.filter = new Filter({
                 requestConfig: requestConfig
             });
 
@@ -55,6 +62,8 @@ define([
 
             this.pagination.setElement(this.$('.pagination-holder').get(0))
             this.pagination.render();
+            this.filter.setElement(this.$('.filter').get(0))
+            this.filter.render();
 
             return this;
         },

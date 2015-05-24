@@ -7,7 +7,16 @@ var User = require('../../models/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    var query = User.find()
+    var searchCriterias = {};
+
+    if(req.query.searchBy && req.query.searchValue){
+        searchCriterias[req.query.searchBy] = {
+            '$regex': req.query.searchValue,
+            '$options': 'i'
+        };
+    }
+
+    var query = User.find(searchCriterias)
         .sort((req.query.sortDir === 'asc' ? '' : '-') + req.query.sortBy);
 
     query.count(function(err, count){
