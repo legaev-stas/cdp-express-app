@@ -28,8 +28,14 @@ define([
         showPopup: function(id){
             this.model = new Model();
 
-            this.listenTo(this.model, 'error', function(){
-                alert('error');
+            this.listenTo(this.model, 'error', function(model, xhr, options){
+                var msg = '';
+
+                _.each(xhr.responseJSON.errors, function(v, k){
+                    msg += v.message + '\n';
+                });
+
+                alert(msg)
             });
 
             if(_.isUndefined(id)){

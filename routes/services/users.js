@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var db = require('../../db/db');
 var User = require('../../models/user');
 
 
@@ -24,7 +23,7 @@ router.get('/', function(req, res, next) {
         .limit(req.query.perPage)
         .exec('find', function(err, matchedUsers){
             if(err){
-                res.end(500)
+                res.status(500).json(err);
             } else{
                 res.json({
                     collection: matchedUsers,
@@ -39,7 +38,7 @@ router.get('/', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
     User.findById(req.params.id, function(err, user){
         if(err){
-            res.end(500)
+            res.status(500).json(err);
         } else{
             res.json(user);
         }
@@ -48,9 +47,10 @@ router.get('/:id', function(req, res, next) {
 
 /* create user */
 router.post('/', function(req, res, next) {
+    console.log(req.body)
     User.create(req.body, function (err, user) {
         if(err){
-            res.end(500)
+            res.status(500).json(err);
         } else{
             res.json(user);
         }
@@ -59,12 +59,16 @@ router.post('/', function(req, res, next) {
 
 /* update user entry */
 router.put('/:id', function(req, res, next) {
-    User.findByIdAndUpdate(req.params.id, req.body, function(err, model){
-        if(err){
-            res.end(500)
-        } else{
-            res.json(model);
-        }
+    User.findById(req.params.id, function(err, user){
+        if (err) return res.status(500).json(err);
+
+        user.set(req.body);
+
+        user.save(req.body, function(err, user){
+            if (err) return res.status(500).json(err);
+
+            res.json(user);
+        })
     })
 });
 
@@ -72,7 +76,7 @@ router.put('/:id', function(req, res, next) {
 router.delete('/:id', function(req, res, next) {
     User.findByIdAndRemove(req.params.id, function(err, model){
         if(err){
-            res.end(500)
+            res.status(500).json(err);
         } else{
             res.sendStatus(200);
         }
